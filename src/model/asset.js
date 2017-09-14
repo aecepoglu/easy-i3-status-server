@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 var schema = new mongoose.Schema({
 	name: String,
-	votes: Number,
+	votes: {type: Number, default: 0},
 	repoUrl: String
 });
 

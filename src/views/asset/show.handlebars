@@ -1,0 +1,87 @@
+<div class="row">
+	<div class="col-xs-8">
+		<h4>
+			{{asset.name}} 
+			<a href="{{asset.repoUrl}}" target="_blank"><i class="glyphicon glyphicon-link"></i></a>
+		</h4>
+	</div>
+	<div class="col-xs-4 text-right">
+		<button class="btn btn-default" onclick="vote(this, '/assets/{{asset.id}}/upvote')">
+			<span id="numVotes">{{asset.votes}}</span>
+			<i class="glyphicon glyphicon-thumbs-up"></i>
+		</button>
+	</div>
+</div>
+
+{{#if asset.repoUrl}}
+<div id="readmeContainer" class="well" repoUrl="{{asset.repoUrl}}">
+	loading...
+	<!-- TODO put loading animation here -->
+</div>
+{{/if}}
+<script type="text/javascript">
+
+function vote(btn, postUrl) {
+	btn.setAttribute("disabled", true);
+
+	httpRequest("POST", postUrl, {}, function() {
+		if (this.status >= 400) {
+			throw new Error(this.response);
+		} else {
+			document.getElementById("numVotes").innerHTML = this.response;
+			btn.className = "btn btn-success";
+		}
+	});
+}
+
+function httpRequest(method, url, headers, cb) {
+	var req = new XMLHttpRequest();
+
+	req.addEventListener("load", cb);
+
+	req.open(method, url);
+	for (var k in headers) {
+		req.setRequestHeader("Accept", "application/vnd.github.3.html");
+	}
+	req.send();
+}
+
+(function populateReadmeContainer(containerId) {
+	var div = document.getElementById(containerId);
+	var repoUrl = div.getAttribute("repoUrl");
+	var regexp = new RegExp("github\.com\/([^\/]+)\/(.+)$");
+
+	var matches = repoUrl.match(regexp);
+
+	var readmeUrl = "https://api.github.com/repos/" + matches[1] + "/" + matches[2] + "/README.md";
+	
+	httpRequest("GET", readmeUrl, {
+		"Accept": "application/vnd.github.3.html"
+	}, function() {
+		var content;
+
+		if (this.status >= 400) {
+			var errMsgs = [
+				this.status + ":" + this.statusText
+			];
+
+			if (this.status == 404) {
+				errMsgs = errMsgs.concat([
+					"<hr>\n",
+					"<p>Could not find a README file at <a href=\"" + readmeUrl + "\">" + readmeUrl + "</a>.</p>",
+					"<p>A file named <b>README.md</b> must exist in the repo.</p>"
+				]);
+			}
+
+			div.className = "alert alert-danger";
+
+			content = errMsgs.join("\n");
+		} else {
+			content = this.response;
+		}
+
+		div.innerHTML = content;
+	}, {
+	});
+})("readmeContainer");
+</script>

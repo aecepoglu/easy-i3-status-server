@@ -1,4 +1,5 @@
 var express = require("express");
+var handlebars = require("express-handlebars");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var config = require("./config");
@@ -9,8 +10,13 @@ mongoose.Promise = require("q").Promise;
 
 mongoose.connect(config.mongoUrl);
 
-app.set("view engine", "ejs");
+app.engine("handlebars", handlebars({
+	defaultLayout: "index",
+	layoutsDir: __dirname + "/views/layouts"
+}));
+app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
+
 
 app.use("/",
 	bodyParser.urlencoded({extended: false}),
@@ -18,10 +24,7 @@ app.use("/",
 	function(err, req, res, next) {
 		console.warn(err);
 		res.status(400).send(err);
-});
-
-app.get("/", function(req, res) {
-	res.render("index.ejs");
-});
+	}
+);
 
 module.exports = app;

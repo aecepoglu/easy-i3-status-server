@@ -1,0 +1,27 @@
+<div style="margin-bottom: 0.2em">
+	<a class="btn btn-default" href="/assets/new">
+		<i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+		Add
+	</a>
+</div>
+
+<table class="table table-striped table-bordered">
+	{{#each assets}}
+	<tr>
+		<th>
+			Name
+		</th>
+		<th>
+			Votes
+		</th>
+	</tr>
+	<tr>
+		<td>
+			<a href="/assets/{{id}}">{{name}}</a>
+		</td>
+		<td>
+			{{votes}}
+		</td>
+	</tr>
+	{{/each}}
+</table>
