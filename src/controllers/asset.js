@@ -34,8 +34,7 @@ route.post("/", function(req, res, next) {
 		console.log(err);
 		console.log("errored");
 		res.render(err);
-	});
+	})
 });
 
 module.exports = route;
-
