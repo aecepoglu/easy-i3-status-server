@@ -9,7 +9,7 @@ route.get("/new", function(req, res, next) {
 });
 
 route.get("/:id", function(req, res, next) {
-	Asset.findById(req.params.id).exec()
+	Asset.findById(req.params.id)
 	.then(function(it) {
 		res.render("asset/show", {
 			asset: it,
@@ -20,7 +20,7 @@ route.get("/:id", function(req, res, next) {
 });
 
 route.get("/", function(req, res, next) {
-	Asset.find({}).exec()
+	Asset.findAll({})
 	.then(function(assets) {
 		res.render("asset/list", {
 			assets: assets,
@@ -31,9 +31,7 @@ route.get("/", function(req, res, next) {
 });
 
 route.post("/", function(req, res, next) {
-	var asset = new Asset(req.body);
-
-	asset.save()
+	Asset.create(req.body)
 	.then(function(it) {
 		res.redirect(it.id);
 	})
@@ -43,10 +41,11 @@ route.post("/", function(req, res, next) {
 });
 
 route.post("/:id/upvote", function(req, res, next) {
-	Asset.findByIdAndUpdate(req.params.id, {
-		$inc: {votes: +1}
-	}, {
-		new: true
+	Asset.findById(req.params.id)
+	.then(function(it) {
+		console.log(it);
+		console.log(it.getDataValue("votes"));
+		return it.increment("votes", {by: 1});
 	})
 	.then(function(it) {
 		res.send("" + it.votes);

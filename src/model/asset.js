@@ -1,11 +1,19 @@
-var mongoose = require("mongoose");
+var sequelize = require("../util/sequelize").sequelize;
+var TYPES = require("sequelize").DataTypes;
 
-var schema = new mongoose.Schema({
-	name: String,
-	votes: {type: Number, default: 0},
-	repoUrl: String
+var model = sequelize.define("asset", {
+	name: {
+		type: TYPES.STRING,
+		allowNull: false
+	},
+	votes: {
+		type: TYPES.INTEGER,
+		defaultValue: 0
+	},
+	repoUrl: {
+		type: TYPES.STRING,
+		unique: true
+	}
 });
-
-var model = mongoose.model("Asset", schema);
 
 module.exports = model;
