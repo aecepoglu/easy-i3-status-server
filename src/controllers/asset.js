@@ -43,8 +43,6 @@ route.post("/", function(req, res, next) {
 route.post("/:id/upvote", function(req, res, next) {
 	Asset.findById(req.params.id)
 	.then(function(it) {
-		console.log(it);
-		console.log(it.getDataValue("votes"));
 		return it.increment("votes", {by: 1});
 	})
 	.then(function(it) {

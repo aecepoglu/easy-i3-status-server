@@ -14,7 +14,7 @@ exports.init = function(dbUrl) {
 		return Promise.all([
 			Asset
 		].map(function(it) {
-			return it.sync({force: true});
+			return it.sync({force: false});
 		}));
 	})
 	.then(function() {

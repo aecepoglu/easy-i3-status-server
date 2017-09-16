@@ -53,7 +53,7 @@ function httpRequest(method, url, headers, cb) {
 
 	var matches = repoUrl.match(regexp);
 
-	var readmeUrl = "https://api.github.com/repos/" + matches[1] + "/" + matches[2] + "/README.md";
+	var readmeUrl = "https://api.github.com/repos/" + matches[1] + "/" + matches[2] + "/readme";
 	
 	httpRequest("GET", readmeUrl, {
 		"Accept": "application/vnd.github.3.html"
