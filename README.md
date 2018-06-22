@@ -1,4 +1,6 @@
-To run:
+This is the webserver for [easyi3status](https://github.com/aecepoglu/easyi3status) and is running at [http://easyi3status.herokuapp.com](http://easyi3status.herokuapp.com).
+
+To run locally:
 
     npm start
 
